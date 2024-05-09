@@ -1,5 +1,5 @@
 const mongoose=require("mongoose");
-const providerSchema=new mongoose.Schema({
+const seekerSchema=new mongoose.Schema({
 
     fullName:{
         type:String,
@@ -14,14 +14,6 @@ const providerSchema=new mongoose.Schema({
         type:String,
         required:true
     },
-    profileImage:{
-      type:String,
-       required:true
-    },
-    services:{
-        type:[String],
-        required:true,
-    },
     password:{
         type:String,
         required:true
@@ -30,15 +22,11 @@ const providerSchema=new mongoose.Schema({
         type:String,
         required:true
     },
-    preferredTiming:{
-        type:String,
-        required:true
-    },
     city:{
         type:String,
         required:true
     },
 });
-const member=new mongoose.model("Provider",providerSchema);
-module.exports=member;
+const Register=new mongoose.model("Seeker",seekerSchema);
+module.exports=Register;
 
