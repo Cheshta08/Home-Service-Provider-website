@@ -1,11 +1,14 @@
-const mongoose = require("mongoose");
-mongoose.connect("mongodb://localhost:27017/Registration",{
-    useNewUrlParser:true,
-    useUnifiedTopology:true,
-    
-}).then(()=>{
-    console.log(`connection successful`);
-}).catch((error)=>{
-console.log(error);
-})
+const mongoose=require('mongoose');
 
+const connectDB=async()=>{
+    try {
+        mongoose.set('strictQuery',false);
+        const conn=await mongoose.connect(process.env.MONGODB_URI);
+        console.log(`Database connected : ${conn.connection.host}`);
+
+    } catch (error) {
+        console.log(error);
+    }
+}
+
+module.exports=connectDB;
