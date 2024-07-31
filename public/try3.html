@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign Up Form</title>
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+        <h2>Sign Up</h2>
+        <form id="signupForm" action="submit_signup.php" method="post">
+            <div class="form-group">
+                <label for="fullName">Full Name:</label>
+                <input type="text" class="form-control" id="fullName" name="fullName" required>
+            </div>
+            <div class="form-group">
+                <label for="email">Email Address:</label>
+                <input type="email" class="form-control" id="email" name="email" required>
+            </div>
+            <div class="form-group">
+                <label for="password">Password:</label>
+                <input type="password" class="form-control" id="password" name="password" required minlength="8">
+            </div>
+            <div class="form-group">
+                <label for="confirmPassword">Confirm Password:</label>
+                <input type="password" class="form-control" id="confirmPassword" required minlength="8">
+                <small id="passwordHelp" class="form-text text-muted"></small>
+            </div>
+            <div class="form-group">
+                <label for="gender">Gender:</label>
+                <div>
+                    <label class="radio-inline">
+                        <input type="radio" name="gender" value="Male" required> Male
+                    </label>
+                    <label class="radio-inline">
+                        <input type="radio" name="gender" value="Female" required> Female
+                    </label>
+                    <label class="radio-inline">
+                        <input type="radio" name="gender" value="Other" required> Other
+                    </label>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="city">City:</label>
+                <select class="form-control" id="city" name="city" required>
+                    <option value="" disabled selected id="defaultCity">Select your city</option>
+                    <option value="New York">New York</option>
+                    <option value="Los Angeles">Los Angeles</option>
+                    <option value="Chicago">Chicago</option>
+                    <!-- Add more city options as needed -->
+                </select>
+            </div>
+            <div class="form-group form-check">
+                <input type="checkbox" class="form-check-input" id="agreeTerms" required>
+                <label class="form-check-label" for="agreeTerms">I agree to the terms and conditions</label>
+            </div>
+            <button type="submit" class="btn btn-primary" id="signupButton" disabled>Sign Up</button>
+            <button type="button" class="btn btn-secondary" onclick="resetForm()">Reset</button>
+        </form>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script>
+        function resetForm() {
+            document.getElementById("signupForm").reset();
+            document.getElementById("defaultCity").selected = true;
+        }
+
+        // Password match check
+        document.getElementById("password").addEventListener("input", checkPasswordMatch);
+        document.getElementById("confirmPassword").addEventListener("input", checkPasswordMatch);
+
+        function checkPasswordMatch() {
+            var password = document.getElementById("password").value;
+            var confirmPassword = document.getElementById("confirmPassword").value;
+            var matchMessage = document.getElementById("passwordHelp");
+            var signupButton = document.getElementById("signupButton");
+            
+            if (password === confirmPassword) {
+                matchMessage.innerHTML = "Passwords match!";
+                matchMessage.style.color = "green";
+                signupButton.disabled = false;
+            } else {
+                matchMessage.innerHTML = "Passwords do not match.";
+                matchMessage.style.color = "red";
+                signupButton.disabled = true;
+            }
+        }
+
+        function validateForm() {
+            var city = document.getElementById("city").value;
+            var signupButton = document.getElementById("signupButton");
+            
+            if (city === null || city === "") {
+                alert("Please select your city.");
+                signupButton.disabled = true;
+                return false;
+            }
+            
+            signupButton.disabled = false;
+            return true;
+        }
+    </script>
+</body>
+</html>

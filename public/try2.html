@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Service Providers Directory - Home</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        body {
+            background-image: url(/home.jpg); /* Replace with your actual background image URL */
+            background-size: cover;
+            background-position: center;
+            height: 100vh;
+            margin: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+        }
+
+        .jumbotron {
+            background-color: rgba(0, 0, 0, 0.7); /* Semi-transparent background for better readability */
+            padding: 20px;
+            border-radius: 15px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="jumbotron text-center">
+        <h1 class="display-4">Find Your Service Provider</h1>
+        <p class="lead">Select a service to find the best professionals near you.</p>
+
+        <form>
+            <div class="form-group">
+                <label for="serviceSelect">Select a Service:</label>
+                <select class="form-control" id="serviceSelect">
+                    <option value="all">All Services</option>
+                    <option value="plumbing">Plumbing</option>
+                    <option value="electrical">Electrical</option>
+                    <option value="painting">Painting</option>
+                    <!-- Add more services as needed -->
+                </select>
+                <button type="button" class="btn btn-primary" onclick="filterProviders()">Search</button>
+            </div>
+
+            
+        </form>
+    </div>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+<script>
+    function filterProviders() {
+        var selectedService = document.getElementById("serviceSelect").value;
+        // Implement your logic to filter and display service providers based on the selected service
+        console.log("Selected Service:", selectedService);
+        // You can redirect to another page or update the current page based on the selected service
+    }
+</script>
+
+</body>
+</html>
