@@ -1,0 +1,70 @@
+
+.block {
+    
+    transition: transform 0.3s ease; 
+}
+.bulged {
+    transform: scale(1.075); /* Enlarge the block on mouseover */
+}
+.back{
+    background-image: url('/home.jpg'); /* Replace 'path/to/your/image.jpg' with the actual path to your image file */
+    background-size: cover;
+    background-position: center;
+    height: 600px; /* Ensure the background covers the full height of the viewport */
+    margin: 0; /* Remove default margin to ensure full coverage */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+    font-family: 'Arial', sans-serif;
+    text-align: center;
+}
+.box {
+    background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent background for better readability */
+    padding: 20px;
+    border-radius: 15px;
+}
+
+.form-group {
+    margin-bottom: 20px;
+}
+footer {
+    background-color: #333;
+    color: white;
+    padding: 50px 0;
+}
+.social-icons a {
+    color: white;
+    font-size: 24px;
+    margin-right: 15px;
+}
+.footer-links {
+    margin-top: 20px;
+}
+.footer-links a {
+    color: white;
+    text-decoration: none;
+}
+
+
+.faq-item {
+            margin-bottom: 20px;
+        }
+
+        .question {
+            cursor: pointer;
+            background-color: #007bff;
+            color: #fff;
+            padding: 10px;
+            border-radius: 5px;
+        }
+
+        .question:hover {
+            background-color: #0056b3;
+        }
+
+        .answer {
+            display: none;
+            margin-top: 10px;
+        }
+/* Navigation Bar Styles */
