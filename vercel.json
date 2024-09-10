@@ -8,7 +8,7 @@
   ],
   "functions": {
     "src/app.js": {
-      "maxDuration": 10 // Maximum execution time in seconds
+      "maxDuration": 10 
     }
   }
 }
