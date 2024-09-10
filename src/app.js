@@ -227,28 +227,29 @@ app.post("/seeker_signup", async (req, res) => {
         res.status(400).send(error);
     }
 });
+const timeoutPromise = (promise, ms) => {
+  let id;
+  const timeout = new Promise((_, reject) => {
+    id = setTimeout(() => reject(new Error('Request timed out')), ms);
+  });
+  return Promise.race([promise, timeout]).finally(() => clearTimeout(id));
+};
 
 app.get("/tr", async (req, res) => {
-    try {
-        // Get the selected service from the query parameters
-        const selectedService = req.query.service;
-
-        // Check if a service is selected
-        if (selectedService === "all") {
-            // If a service is selected, filter the data based on the selected service
-            const providerdata = await member.find();
-            res.render("tr", { providerdata, selectedService: "All" });
-
-        } else {
-            // If no service is selected, retrieve all data
-            // "All" can be used as a default value
-            const providerdata = await member.find({ services: { $regex: new RegExp(selectedService, 'i') } });
-            res.render("tr", { providerdata, selectedService });
-        }
-    } catch (error) {
-        res.send(error);
-    }
+  try {
+    const selectedService = req.query.service;
+    const queryPromise = selectedService === "all"
+      ? member.find()
+      : member.find({ services: { $regex: new RegExp(selectedService, 'i') } });
+    
+    const providerdata = await timeoutPromise(queryPromise, 8000); // 8 seconds timeout
+    res.render("tr", { providerdata, selectedService: selectedService === "all" ? "All" : selectedService });
+  } catch (error) {
+    console.error('Error:', error);
+    res.status(500).send('Internal Server Error');
+  }
 });
+
 app.post("/login", async (req, res) => {
     try {
         const phoneNumber = req.body.phoneNumber;
