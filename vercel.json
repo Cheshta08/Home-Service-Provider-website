@@ -1,3 +1,4 @@
+
 {
   "version": 2,
   "builds": [
@@ -8,13 +9,13 @@
   ],
   "routes": [
     {
-      "src": "/(.*)", 
+      "src": "/(.*)",
       "dest": "src/app.js"
     }
   ],
   "functions": {
     "src/app.js": {
-      "maxDuration": 15 // Maximum duration increased to 15 seconds
+      "maxDuration": 10 // Maximum execution time in seconds
     }
   }
 }
