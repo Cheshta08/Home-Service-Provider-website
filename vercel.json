@@ -14,7 +14,7 @@
   ],
   "functions": {
     "src/app.js": {
-      "maxDuration": 15 // Maximum duration increased to 10 seconds
+      "maxDuration": 15 // Maximum duration increased to 15 seconds
     }
   }
 }
