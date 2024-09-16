@@ -248,9 +248,9 @@ app.get("/tr", async (req, res) => {
             res.render("tr", { providerdata, selectedService: "All" });
 
         } else {
-            // If no service is selected, retrieve all data
-            // "All" can be used as a default value
-            const providerdata = await member.find({ services: { $regex: new RegExp(selectedService, 'i') } });
+            const providerdata = await member
+            .find({ services: { $regex: new RegExp(selectedService, 'i') } })
+            .lean();  // Use lean for performance optimization
             res.render("tr", { providerdata, selectedService });
         }
     } catch (error) {
