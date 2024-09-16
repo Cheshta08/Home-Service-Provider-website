@@ -222,9 +222,9 @@
                     </a>
 
                     <ul class="dropdown-menu" style="margin-top:15px" aria-labelledby="profileDropdown">
-                        <li><a class="dropdown-item" href="/profile">View Profile</a></li>
-                        <li><a class="dropdown-item" href="/edit-profile">Edit Profile</a></li>
-                        <li><a class="dropdown-item" href="/change">Change Password</a></li>
+                        <li><a class="dropdown-item" href="profile">View Profile</a></li>
+                        <li><a class="dropdown-item" href="edit-profile">Edit Profile</a></li>
+                        <li><a class="dropdown-item" href="change">Change Password</a></li>
                     </ul>
                 </div>
                 <button type="button" class="btn btn-outline-success" style="margin-right:20px"
@@ -264,28 +264,35 @@
     // Get the <span> element that closes the modal
     var closeButton = document.getElementsByClassName("close")[0];
 
-    // When the user clicks the logout button, open the modal 
-    logoutButton.onclick = function () {
+    // When the user clicks the logout button, open the modal
+    if(logoutButton)
+    {
+     logoutButton.onclick = function () {
         modal.style.display = "block";
         overlay.style.display = "block";
         // Add class to body
     }
 
     // When the user clicks on <span> (x), close the modal
-    closeButton.onclick = function () {
+    }
+    if(closeButton)
+    {
+
+     closeButton.onclick = function () {
         modal.style.display = "none";
         overlay.style.display = "none";
         // Remove class from body
     }
-
-    // When the user clicks anywhere outside of the modal, close it
+    }
+    
+    
     window.onclick = function (event) {
         if (event.target == modal) {
             modal.style.display = "none";
             overlay.style.display = "none";
             // Remove class from body
         }
-    }
+    
 
     // Handle confirmation of logout
     document.getElementById("confirmLogout").addEventListener("click", function () {
@@ -301,5 +308,10 @@
         overlay.style.display = "none";
         // Remove class from body
     });
+    }
+    
+    
+
+    // When the user clicks anywhere outside of the modal, close it
     
 </script>
