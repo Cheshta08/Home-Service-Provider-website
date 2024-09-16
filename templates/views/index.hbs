@@ -34,40 +34,6 @@
         .button-container button {
             margin: 0 10px;
         }
-
-        #logoutSuccessModal {
-
-
-            /* Hide the modal by default */
-            position: fixed;
-            /* Position the modal */
-            top: 50%;
-            /* Center the modal vertically */
-            left: 50%;
-            /* Center the modal horizontally */
-            transform: translate(-50%, -50%);
-            /* Center the modal */
-            background-color: rgba(0, 0, 0, 0.5);
-            /* Modal background color */
-
-            border-radius: 10px;
-            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.3);
-            /* Add shadow to the modal */
-            z-index: 1000;
-            /* Ensure modal appears on top of other content */
-        }
-
-        #modalcontent {
-            background-color: #fefefe;
-            margin: 10% auto;
-            padding: 10px;
-            border: 2px solid #888;
-            width: 40%;
-            /* Adjust the width as per your requirement */
-            max-width: 600px;
-            /* Set a maximum width if needed */
-            text-align: center;
-        }
     </style>
 
 
@@ -78,12 +44,45 @@
 
 <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js"></script>
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+<script>
+
+
+    function toggleAnswer(faqId) {
+        var answer = document.getElementById(faqId);
+        if (answer.style.display === 'block') {
+            answer.style.display = 'none';
+        } else {
+            answer.style.display = 'block';
+        }
+    }
+    document.addEventListener('DOMContentLoaded', function () {
+        var alertDiv = document.getElementById('logoutAlert');
+
+        // Check if the alertDiv exists
+        if (alertDiv) {
+            // Set a timer to hide the message after 1 minute (60000 milliseconds)
+            setTimeout(function () {
+                alertDiv.style.display = 'none';
+            }, 6000); // 1 minute = 60000 milliseconds
+        }
+    });
+
+
+
+
+</script>
 
 
 <body>
 
     {{>navbar}}
+
+    {{#if message }}
+    <div id="logoutAlert" class="alert alert-success" role="alert">
+        You have been successfully logged out
+    </div>
+    {{/if}}
 
     <div class="container-fluid back">
         <div class="box text-center">
@@ -326,16 +325,8 @@
 
 
     </div>
+    <span id="logoutMessage" style="display: none;">{{message}}</span>
 
-    <div id="logoutSuccessModal" class="modal">
-        <div class="modal-content" id="modalcontent">
-            <p class="my-2">You have been successfully logged out.</p>
-            <div class="button-container">
-                <button id="okbutton" class="btn btn-primary">OK</button>
-            </div>
-
-        </div>
-    </div>
 
 
 
@@ -346,39 +337,5 @@
 
 
 </body>
-<script>
-
-    var modal = document.getElementById("logoutSuccessModal");
-
-    document.addEventListener('DOMContentLoaded', function () {
-        // Execute your function here
-        const logout={{message}}
-        
-        if (logout) {
-            modal.style.display = "block";
-            
-        }
-
-    });
-
-    function toggleAnswer(faqId) {
-        var answer = document.getElementById(faqId);
-        if (answer.style.display === 'block') {
-            answer.style.display = 'none';
-        } else {
-            answer.style.display = 'block';
-        }
-    }
-
-    var okbutton = document.getElementById("okbutton");
-
-    okbutton.onclick = function () {
-        modal.style.display = 'none';
-        window.location.href = "/";
-
-        
-    }
-
-</script>
 
 </html>
