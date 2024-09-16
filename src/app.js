@@ -75,8 +75,8 @@ app.use((req, res, next) => {
 
 
 app.get('/', (req, res) => {
-    const message = req.query.message; 
-    res.render("index",{message})
+    const message = req.query.message;
+    res.render("index", { message })
 })
 
 app.get("/index", async (req, res) => {
@@ -124,8 +124,8 @@ app.get('/logout', (req, res) => {
                 console.log(err);
             } else {
                 // Redirect to the index page
-                  // Set the message
-                res.redirect('/?message=true'); 
+                // Set the message
+                res.redirect('/?message=true');
             }
         });
     }, 500);
@@ -239,8 +239,12 @@ app.get("/tr", async (req, res) => {
 
         // Check if a service is selected
         if (selectedService === "all") {
+            const page = parseInt(req.query.page) || 1;  // Get current page from query, default is 1
+            const limit = 20;  // Number of items per page
+            const skip = (page - 1) * limit;  // Calculate how many items to skip
+
             // If a service is selected, filter the data based on the selected service
-            const providerdata = await member.find().limit(20);
+            const providerdata = await member.find().skip(skip).limit(limit).lean(); 
             res.render("tr", { providerdata, selectedService: "All" });
 
         } else {
@@ -340,7 +344,7 @@ app.get('/edit-profile', async (req, res) => {
                 }
                 selectedServicesString += userServices[i];
             }
-            
+
             console.log(selectedServicesString);
             // Render the profile page with services information
             res.render('edit-profile', { user, selectedServicesString });
@@ -348,7 +352,7 @@ app.get('/edit-profile', async (req, res) => {
         } else {
             // If not found in 'member', try to find the user in 'Register'
             user = await Register.findOne({ _id: userId });
-            
+
             if (user) {
                 // Render the profile page without services information
                 res.render('edit-profile', { user, selectedServicesString: null });
@@ -449,7 +453,7 @@ app.post('/edit-profile', async (req, res) => {
     );
     if (user) {
         // Password reset successful, you can redirect to a success page
-        res.render("profile", { user,profileChanged: true });
+        res.render("profile", { user, profileChanged: true });
     } else {
         // Handle the case where the user is not found
         console.log('User not found');
@@ -463,20 +467,20 @@ app.post('/change', async (req, res) => {
     // Retrieve form data from the request body
     const password = req.body.password;
     const confirmPassword = req.body.confirmPassword;
-    
+
 
     const user = await Register.findOneAndUpdate(
         { _id: userId },
-        { $set: { password:password,confirmPassword:confirmPassword } },
+        { $set: { password: password, confirmPassword: confirmPassword } },
         { new: true } // Return the updated document
     ) || await member.findOneAndUpdate(
         { _id: userId },
-        { $set: { password:password,confirmPassword:confirmPassword } },
+        { $set: { password: password, confirmPassword: confirmPassword } },
         { new: true } // Return the updated document
     );
     if (user) {
         // Password reset successful, you can redirect to a success page
-        res.render("profile", { user,passwordChanged: true });
+        res.render("profile", { user, passwordChanged: true });
     } else {
         // Handle the case where the user is not found
         console.log('User not found');
