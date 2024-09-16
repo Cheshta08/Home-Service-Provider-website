@@ -43,6 +43,7 @@ const Register = require("./models/registers");
 const query = require("./models/query");
 const member = require("./models/providers");
 const SMTPConnection = require('nodemailer/lib/smtp-connection');
+const connectDB = require('./db/conn');
 const static_path = path.join(__dirname, "../public");
 const template_path = path.join(__dirname, "../templates/views");
 const partials_path = path.join(__dirname, "../templates/partials");
@@ -57,6 +58,7 @@ hbs.registerPartials(partials_path);
 const accountSid = process.env.TWILIO_SID;
 const authToken = process.env.TWILIO_AUTH_TOKEN;
 const twilioPhoneNumber = process.env.TWILIO_PHONE_NUMBER;
+connectDB()
 
 // Create a Twilio client
 const client = new twilio(accountSid, authToken);
@@ -73,11 +75,12 @@ app.use((req, res, next) => {
 
 
 app.get('/', (req, res) => {
-    res.render("index")
+    const message = req.query.message; 
+    res.render("index",{message})
 })
 
 app.get("/index", async (req, res) => {
-    res.render("index",{message:null});
+    res.render("index");
 });
 
 app.get('/change-password', (req, res) => {
@@ -121,10 +124,11 @@ app.get('/logout', (req, res) => {
                 console.log(err);
             } else {
                 // Redirect to the index page
-                res.render("index", { message: true });
+                  // Set the message
+                res.redirect('/?message=true'); 
             }
         });
-    }, 1000);
+    }, 500);
 });
 
 app.post("/contact", async (req, res) => {
@@ -227,29 +231,28 @@ app.post("/seeker_signup", async (req, res) => {
         res.status(400).send(error);
     }
 });
-const timeoutPromise = (promise, ms) => {
-  let id;
-  const timeout = new Promise((_, reject) => {
-    id = setTimeout(() => reject(new Error('Request timed out')), ms);
-  });
-  return Promise.race([promise, timeout]).finally(() => clearTimeout(id));
-};
 
 app.get("/tr", async (req, res) => {
-  try {
-    const selectedService = req.query.service;
-    const queryPromise = selectedService === "all"
-      ? member.find()
-      : member.find({ services: { $regex: new RegExp(selectedService, 'i') } });
-    
-    const providerdata = await timeoutPromise(queryPromise, 8000); // 8 seconds timeout
-    res.render("tr", { providerdata, selectedService: selectedService === "all" ? "All" : selectedService });
-  } catch (error) {
-    console.error('Error:', error);
-    res.status(500).send('Internal Server Error');
-  }
-});
+    try {
+        // Get the selected service from the query parameters
+        const selectedService = req.query.service;
 
+        // Check if a service is selected
+        if (selectedService === "all") {
+            // If a service is selected, filter the data based on the selected service
+            const providerdata = await member.find();
+            res.render("tr", { providerdata, selectedService: "All" });
+
+        } else {
+            // If no service is selected, retrieve all data
+            // "All" can be used as a default value
+            const providerdata = await member.find({ services: { $regex: new RegExp(selectedService, 'i') } });
+            res.render("tr", { providerdata, selectedService });
+        }
+    } catch (error) {
+        res.send(error);
+    }
+});
 app.post("/login", async (req, res) => {
     try {
         const phoneNumber = req.body.phoneNumber;
@@ -316,14 +319,18 @@ app.get('/profile', async (req, res) => {
         res.redirect('/');
     }
 });
+
 app.get('/edit-profile', async (req, res) => {
     const userId = req.session.user._id;
     // Assuming _id is the identifier for users
 
     try {
-        const user = await Register.findOne({ _id: userId }) || await member.findOne({ _id: userId });; // Query MongoDB for the user data
+        // Attempt to find the user in the 'member' collection first
+        let user = await member.findOne({ _id: userId });
+
         if (user) {
-            const userServices = user.services;
+            // User found in 'member', process the 'services' field
+            const userServices = user.services || []; // Default to empty array if services is undefined
             let selectedServicesString = '';
 
             // Iterate over the array and construct the string
@@ -333,11 +340,22 @@ app.get('/edit-profile', async (req, res) => {
                 }
                 selectedServicesString += userServices[i];
             }
-            console.log(selectedServicesString)
-            // If user data is found, render the profile page and pass user data to it
+            
+            console.log(selectedServicesString);
+            // Render the profile page with services information
             res.render('edit-profile', { user, selectedServicesString });
+
         } else {
-            res.redirect('/');
+            // If not found in 'member', try to find the user in 'Register'
+            user = await Register.findOne({ _id: userId });
+            
+            if (user) {
+                // Render the profile page without services information
+                res.render('edit-profile', { user, selectedServicesString: null });
+            } else {
+                // User not found in either collection
+                res.redirect('/');
+            }
         }
     } catch (error) {
         // Handle any errors that occur during the database query
