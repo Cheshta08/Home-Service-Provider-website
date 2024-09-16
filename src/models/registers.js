@@ -10,6 +10,10 @@ const seekerSchema=new mongoose.Schema({
         required:true,
         unique:true
     },
+    profileImage:{
+        type:String,
+         required:true
+    },  
     Address:{
         type:String,
         required:true
