@@ -240,7 +240,7 @@ app.get("/tr", async (req, res) => {
         // Check if a service is selected
         if (selectedService === "all") {
             // If a service is selected, filter the data based on the selected service
-            const providerdata = await member.find().limit(20;
+            const providerdata = await member.find().limit(20);
             res.render("tr", { providerdata, selectedService: "All" });
 
         } else {
